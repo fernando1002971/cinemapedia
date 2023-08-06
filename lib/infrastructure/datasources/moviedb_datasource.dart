@@ -6,6 +6,7 @@ import 'package:cinemapedia/infrastructure/models/moviedb/moviedb_response.dart'
 import 'package:dio/dio.dart';
 
 class MoviedbDatasource extends MovieDatasource {
+  //Parámetros iniciales para la petición HTTP
   final dio = Dio(BaseOptions(
       baseUrl: "https://api.themoviedb.org/3",
       queryParameters: {
@@ -13,22 +14,48 @@ class MoviedbDatasource extends MovieDatasource {
         "language": "es-MX"
       }));
 
-  @override
-  Future<List<Movie>> getNowPlaying({int page = 1}) async {
+//Procesamiento de la información recibida
+  List<Movie> _jsonToMovies(Map<String, dynamic> json) {
+    final movieDBResponse = MovieDbResponse.fromJson(json);
 
-    final response = await dio.get("/movie/now_playing",
-      queryParameters: {
-      "page":page
-    });
-
-    final movieDBResponse = MovieDbResponse.fromJson(response.data);
-
-    final List<Movie> movies =  movieDBResponse.results
-    .where((moviedb) => moviedb.posterPath != "no-poster")
-    .map((moviedb) => 
-    MovieMapper.movieDBtoEntity(moviedb)
-    ).toList() ;
+    final List<Movie> movies = movieDBResponse.results
+        .where((moviedb) => moviedb.posterPath != "no-poster")
+        .map((moviedb) => MovieMapper.movieDBtoEntity(moviedb))
+        .toList();
 
     return movies;
+  }
+
+//Llamadas a los endpoints:
+  @override
+  Future<List<Movie>> getNowPlaying({int page = 1}) async {
+    final response =
+        await dio.get("/movie/now_playing", queryParameters: {"page": page});
+
+    return _jsonToMovies(response.data);
+  }
+
+  @override
+  Future<List<Movie>> getPopular({int page = 1}) async {
+    final response =
+        await dio.get("/movie/popular", queryParameters: {"page": page});
+
+    return _jsonToMovies(response.data);
+  }
+
+  @override
+  Future<List<Movie>> getTopRated({int page = 1}) async {
+    final response =
+        await dio.get("/movie/top_rated", queryParameters: {"page": page});
+
+    return _jsonToMovies(response.data);
+  }
+
+  @override
+  Future<List<Movie>> getUpcoming({int page = 1}) async {
+    final response =
+        await dio.get("/movie/upcoming", queryParameters: {"page": page});
+
+    return _jsonToMovies(response.data);
   }
 }
