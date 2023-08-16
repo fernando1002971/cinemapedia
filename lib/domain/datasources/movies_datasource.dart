@@ -1,8 +1,7 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 
 abstract class MovieDatasource {
-
-  //Peliculas en cartelera  
+  //Peliculas en cartelera
   Future<List<Movie>> getNowPlaying({int page = 1});
 
   //Peliculas populares
@@ -14,5 +13,6 @@ abstract class MovieDatasource {
   //Proximamente
   Future<List<Movie>> getUpcoming({int page = 1});
 
+  //Obtener peliculas por Id
+  Future<Movie> getMovieById(String id);
 }
-

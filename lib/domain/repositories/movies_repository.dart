@@ -13,4 +13,7 @@ abstract class MovieRepository {
   //Proximamente
   Future<List<Movie>> getUpcoming({int page = 1});
 
+  //Obtener peliculas por id
+  Future<Movie> getMovieById(String id);
+
 }
