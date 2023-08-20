@@ -42,7 +42,10 @@ class CustomBottomNavigation extends StatelessWidget {
         elevation: 0,
         onTap: (value) => onItemTapped(context, value),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_max), label: "Inicio"),
+          BottomNavigationBarItem(
+          icon: Icon(Icons.home_max), 
+          label: "Inicio"
+          ),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.label_outline,
